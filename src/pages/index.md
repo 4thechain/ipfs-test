@@ -14,4 +14,4 @@ title: wasp zone
 
 [youtube](https://www.youtube.com/@waspzone)
 
-<!-- [contact](/contact) -->
+[contact](/contact)
