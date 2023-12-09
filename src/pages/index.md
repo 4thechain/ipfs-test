@@ -8,8 +8,10 @@ title: wasp zone
 
 [blog](/blog)
 
-[youtube](https://www.youtube.com/@waspzone)
+[github](https://www.github.com/waspzone)
 
 [instagram](https://www.instagram.com/waspzone/)
+
+[youtube](https://www.youtube.com/@waspzone)
 
 <!-- [contact](/contact) -->
