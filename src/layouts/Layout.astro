@@ -12,12 +12,12 @@ interface Props {
 }
 
 // @ts-ignore - TODO figure otu type safety on this
-const { frontmatter } = Astro.props
+const { title } = Astro.props.frontmatter || Astro.props;
 
 const isHome = Astro.url.pathname === '/'
 
 const pageTitle = [
-	frontmatter.title ? frontmatter.title : undefined,
+	title ? title : undefined,
 	isHome ? SITE_NAME : undefined,
 ].filter(Boolean).join(' | ')
 
