@@ -1,6 +1,6 @@
 ---
 layout: ../layouts/Layout.astro
-title: wasp zone
+title: wasp.zone
 ---
 <!-- Markdown Preview - https://dillinger.io/ -->
 
