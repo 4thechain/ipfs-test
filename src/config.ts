@@ -1,6 +1,6 @@
 
 
-export const SITE_NAME = 'Nice Tat'
+export const SITE_NAME = 'wasp zone'
 
 
-export const DESCRIPTION = 'Astro Site Template inspired by Casey Neistat’s ultra minimal personal site. '
+export const DESCRIPTION = 'temporary portfolio'
