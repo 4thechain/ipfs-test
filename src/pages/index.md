@@ -1,17 +1,15 @@
 ---
 layout: ../layouts/Layout.astro
-title: Nice Tat Astro Template
+title: wasp zone
 ---
 <!-- Markdown Preview - https://dillinger.io/ -->
 
-# Nice Tat Astro Template
+# wasp zone
 
-[youtube](https://www.youtube.com/watch?v=sEyHnHjhlr4)
+[blog](/blog)
 
-[instagram](https://www.instagram.com/caseyneistat/)
+[youtube](https://www.youtube.com/@waspzone)
 
-[onlyfans](/onlyfans)
+[instagram](https://www.instagram.com/waspzone/)
 
-[twitter](https://twitter.com/Casey)
-
-[contact](/contact)
+<!-- [contact](/contact) -->
