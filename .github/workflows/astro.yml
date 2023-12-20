@@ -55,7 +55,8 @@ jobs:
               } else {
                 console.error('Failed to pin files to Pinata Cloud:', res);
               }
-        secrets: ['PINATA_JWT_TOKEN']
+        env:
+          PINATA_TOKEN: ${{ secrets.PINATA_JWT_TOKEN }}
 
       - name: Deploy status
         uses: actions/github-script@v6
