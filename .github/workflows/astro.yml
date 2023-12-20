@@ -85,3 +85,11 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v3
+      - name: Upload to Pinata Cloud (IPFS)
+        run: |
+          curl -X POST -H "Content-Type: application/json" \
+            -H "pinata_api_key:${{ secrets.PINATA_KEY }}" \
+            -H "pinata_secret_api_key:${{ secrets.PINATA_KEY }}" \
+            --data '{"pinataOptions": {"cidVersion": 0},"pinningRegions": ["FRA1"],"hashAlg": "sha2-256","wrapWithDirectory": false}' \
+            https://api.pinata.cloud/pinning/pinFileToIPFS \
+            --upload-file ./dist
