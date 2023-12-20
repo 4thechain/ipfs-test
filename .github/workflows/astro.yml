@@ -2,7 +2,7 @@ name: AstroJS Deployment to Pinata
 
 on:
   push:
-    branches: [ main ]  # Assuming 'main' is the default branch
+    branches: [ master ]  # Assuming 'main' is the default branch
 
 jobs:
   build-and-deploy:
