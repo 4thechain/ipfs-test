@@ -102,7 +102,7 @@ jobs:
           const rfs = require("recursive-fs");
           const basePathConverter = require("base-path-converter");
           const got = require('got');
-          const JWT = 'Bearer ${{ secrets.PINATA_JWT_TOKEN }}';
+          const JWT = 'Bearer ' + process.env.PINATA_JWT;
           
           const pinDirectoryToPinata = async () => {
             const url = `https://api.pinata.cloud/pinning/pinFileToIPFS`;
