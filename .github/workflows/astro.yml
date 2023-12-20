@@ -91,10 +91,6 @@ jobs:
         with:
           name: github-pages
           path: ${{ github.workspace }}/downloaded-artifact
-      - name: Debug API Keys
-        run: |
-          echo "Pinata API Key: ${{ secrets.PINATA_API_KEY }}"
-          echo "Pinata Secret API Key: ${{ secrets.PINATA_SECRET_API_KEY }}"
       - name: Deploy to Pinata Cloud (IPFS)
         run: |
           const fs = require("fs");
@@ -102,7 +98,7 @@ jobs:
           const rfs = require("recursive-fs");
           const basePathConverter = require("base-path-converter");
           const got = require('got');
-          const JWT = 'Bearer ' + process.env.PINATA_JWT;
+          const JWT = `Bearer ${process.env.PINATA_JWT}`;
           
           const pinDirectoryToPinata = async () => {
             const url = `https://api.pinata.cloud/pinning/pinFileToIPFS`;
