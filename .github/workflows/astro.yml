@@ -33,7 +33,7 @@ jobs:
           message: 'Deploying to Pinata Cloud...'
           context: 'deployment'
 
-      - name: Deploy AstroJS website to Pinata Cloud
+      - name: Deploy AstroJS website 
         run: |
           curl -sS -H 'Authorization: Bearer ${{ secrets.PINATA_JWT_TOKEN }}' https://api.pinata.cloud/pinning/pin -X POST -F pinFile=@dist/index.html
 
