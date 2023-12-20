@@ -100,5 +100,6 @@ jobs:
           curl -X POST -H "Content-Type: application/json" \
             -H "Authorization: Bearer ${{ secrets.PINATA_JWT_TOKEN }}" \
             --data '{"pinataOptions": {"cidVersion": 0}, "pinningRegions": ["FRA1"], "hashAlg": "sha2-256", "wrapWithDirectory": false}' \
+            --url https://api.pinata.cloud/pinning/pinFileToIPFS \
             --data-binary .
         working-directory: ${{ github.workspace }}/downloaded-artifact
