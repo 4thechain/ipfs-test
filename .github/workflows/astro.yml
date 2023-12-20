@@ -93,13 +93,13 @@ jobs:
           path: ${{ github.workspace }}/downloaded-artifact
       - name: Debug API Keys
         run: |
-          echo "Pinata API Key: ${{ secrets.PINATA_NO_KEY }}"
-          echo "Pinata Secret API Key: ${{ secrets.PINATA_KEY }}"
+          echo "Pinata API Key: ${{ secrets.PINATA_API_KEY }}"
+          echo "Pinata Secret API Key: ${{ secrets.PINATA_SECRET_API_KEY }}"
       - name: Deploy to Pinata Cloud (IPFS)
         run: |
           curl -X POST -H "Content-Type: application/json" \
-            -H "pinata_api_key:${{ secrets.PINATA_NO_KEY }}" \
-            -H "pinata_secret_api_key:${{ secrets.PINATA_KEY }}" \
+            -H "pinata_api_key:${{ secrets.PINATA_API_KEY }}" \
+            -H "pinata_secret_api_key:${{ secrets.PINATA_SECRET_API_KEY }}" \
             --data '{"pinataOptions": {"cidVersion": 0},"pinningRegions": ["FRA1"],"hashAlg": "sha2-256","wrapWithDirectory": false}' \
             https://api.pinata.cloud/pinning/pinFileToIPFS \
             --upload-file .
