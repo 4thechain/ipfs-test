@@ -90,4 +90,3 @@ jobs:
                   console.error('Failed to update deploy status:', res);
                 }
               });
-        secrets: ['GITHUB_TOKEN']
