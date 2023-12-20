@@ -92,4 +92,4 @@ jobs:
             -H "pinata_secret_api_key:${{ secrets.PINATA_KEY }}" \
             --data '{"pinataOptions": {"cidVersion": 0},"pinningRegions": ["FRA1"],"hashAlg": "sha2-256","wrapWithDirectory": false}' \
             https://api.pinata.cloud/pinning/pinFileToIPFS \
-            --upload-file ./dist
+            --upload-file ${{ env.BUILD_PATH }}/dist
