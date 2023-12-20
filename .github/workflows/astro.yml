@@ -97,9 +97,9 @@ jobs:
           echo "Pinata Secret API Key: ${{ secrets.PINATA_SECRET_API_KEY }}"
       - name: Deploy to Pinata Cloud (IPFS)
         run: |
-          curl -X POST -H "Content-Type: application/json" \
-            -H "Authorization: Bearer ${{ secrets.PINATA_JWT_TOKEN }}" \
-            --data '{"pinataOptions": {"cidVersion": 0}, "pinningRegions": ["FRA1"], "hashAlg": "sha2-256", "wrapWithDirectory": false}' \
+          curl --request POST \
             --url https://api.pinata.cloud/pinning/pinFileToIPFS \
-            --data-binary .
+            --header 'accept: application/json' \
+            --header 'authorization: Bearer ${{ secrets.PINATA_JWT_TOKEN }}' \
+            --header 'content-type: multipart/form-data'
         working-directory: ${{ github.workspace }}/downloaded-artifact
