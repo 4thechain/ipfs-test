@@ -34,7 +34,7 @@ jobs:
           context: 'deployment'
 
       - name: Deploy AstroJS website to Pinata Cloud
-        run: curl -sS -H 'Authorization: Bearer ${{ secrets.PINATA_TOKEN }}' https://api.pinata.cloud/pinning/pin -X POST -F pinFile=@dist/index.html
+        run: curl -sS -H 'Authorization: Bearer ${{ secrets.PINATA_JWT_TOKEN }}' https://api.pinata.cloud/pinning/pin -X POST -F pinFile=@dist/index.html
 
       - name: Set deploy status
         uses: peter-evans/create-status@v2.3.1
