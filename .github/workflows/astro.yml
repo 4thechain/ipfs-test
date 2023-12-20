@@ -36,7 +36,7 @@ jobs:
               const PINATA_TOKEN = process.env.PINATA_TOKEN;
 
               // Get the artifact path
-              const artifactPath = `${GITHUB_WORKSPACE}/artifacts/astrojs-website`;
+              const artifactPath = = 'dist';
 
               // Upload the artifact files to Pinata Cloud
               const pinfile = fs.readFileSync(`${artifactPath}/index.html`);
