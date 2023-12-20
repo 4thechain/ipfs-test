@@ -2,7 +2,7 @@ name: AstroJS Deployment to Pinata
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]  # Assuming 'main' is the default branch
 
 jobs:
   build-and-deploy:
@@ -10,16 +10,24 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
-      - name: Install Yarn and AstroJS dependencies
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install Yarn
+        run: npm install -g yarn
+
+      - name: Install AstroJS dependencies
         run: yarn install
 
       - name: Build AstroJS website
         run: yarn build
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2
         with:
           name: astrojs-website
           path: dist
@@ -29,64 +37,68 @@ jobs:
         run: echo "Enabling workflow..."
 
       - name: Deploy AstroJS website
-        uses: actions/github-script@v6
-        with:
-            script: |
-              // Get the PINATA_TOKEN secret from the environment
-              const PINATA_TOKEN = process.env.PINATA_TOKEN;
+        run: |
+          const fs = require('fs');
+          const fetch = require('node-fetch');
+          const PINATA_TOKEN = process.env.PINATA_TOKEN;
+          const artifactPath = 'dist';  # Update with the actual path
 
-              // Get the artifact path
-              const artifactPath = = 'dist';
-
-              // Upload the artifact files to Pinata Cloud
-              const pinfile = fs.readFileSync(`${artifactPath}/index.html`);
-
-              const res = await fetch('https://api.pinata.cloud/pinning/pin', {
+          // Read the file asynchronously
+          fs.promises.readFile(`${artifactPath}/index.html`)
+            .then(pinfile => {
+              return fetch('https://api.pinata.cloud/pinning/pin', {
                 method: 'POST',
                 headers: {
                   Authorization: `Bearer ${PINATA_TOKEN}`,
                 },
                 body: pinfile,
               });
-
-              if (res.status === 200) {
-                const data = await res.json();
-                console.log('Successfully pinned files to Pinata Cloud:', data);
+            })
+            .then(res => {
+              if (res.ok) {
+                return res.json();
               } else {
-                console.error('Failed to pin files to Pinata Cloud:', res);
+                throw new Error(`Failed to pin files to Pinata Cloud: ${res.status}`);
               }
+            })
+            .then(data => {
+              console.log('Successfully pinned files to Pinata Cloud:', data);
+            })
+            .catch(error => {
+              console.error(error);
+            });
+
         env:
           PINATA_TOKEN: ${{ secrets.PINATA_JWT_TOKEN }}
 
       - name: Deploy status
-        uses: actions/github-script@v6
-        with:
-            script: |
-              // Update the deploy status to success
-              const url = `https://api.github.com/repos/${process.env.GITHUB_REPOSITORY}/statuses/${process.env.GITHUB_SHA}`;
-              const data = {
-                state: 'success',
-                message: 'AstroJS website deployed successfully to Pinata Cloud.',
-                context: 'deployment',
-              };
+        run: |
+          const { request } = require('@octokit/request');
+          const data = {
+            state: 'success',
+            description: 'AstroJS website deployed successfully to Pinata Cloud.',
+            context: 'deployment',
+          };
 
-              const options = {
-                method: 'PUT',
-                headers: {
-                  Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
-                },
-                body: JSON.stringify(data),
-              };
+          request('POST /repos/{owner}/{repo}/statuses/{sha}', {
+            owner: process.env.GITHUB_REPOSITORY.split('/')[0],
+            repo: process.env.GITHUB_REPOSITORY.split('/')[1],
+            sha: process.env.GITHUB_SHA,
+            ...data,
+            headers: {
+              authorization: `token ${process.env.GITHUB_TOKEN}`,
+            },
+          })
+            .then(res => {
+              if (res.status === 201) {
+                console.log('Successfully updated deploy status.');
+              } else {
+                throw new Error(`Failed to update deploy status: ${res.status}`);
+              }
+            })
+            .catch(error => {
+              console.error(error);
+            });
 
-              const req = HttpClient().request(url, options);
-              req.on('error', (err) => {
-                console.error('Failed to update deploy status:', err);
-              });
-
-              req.on('response', (res) => {
-                if (res.status === 200) {
-                  console.log('Successfully updated deploy status.');
-                } else {
-                  console.error('Failed to update deploy status:', res);
-                }
-              });
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
