@@ -91,6 +91,10 @@ jobs:
         with:
           name: github-pages
           path: ${{ github.workspace }}/downloaded-artifact
+      - name: Debug API Keys
+        run: |
+          echo "Pinata API Key: ${{ secrets.PINATA_KEY }}"
+          echo "Pinata Secret API Key: ${{ secrets.PINATA_KEY }}"
       - name: Deploy to Pinata Cloud (IPFS)
         run: |
           curl -X POST -H "Content-Type: application/json" \
