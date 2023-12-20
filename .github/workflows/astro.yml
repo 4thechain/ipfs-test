@@ -93,7 +93,6 @@ jobs:
           path: ${{ github.workspace }}/downloaded-artifact
       - name: Deploy to Pinata Cloud (IPFS)
         run: |
-          cd ${{ env.BUILD_PATH }}/dist  # Change to the correct directory
           curl -X POST -H "Content-Type: application/json" \
             -H "pinata_api_key:${{ secrets.PINATA_KEY }}" \
             -H "pinata_secret_api_key:${{ secrets.PINATA_KEY }}" \
