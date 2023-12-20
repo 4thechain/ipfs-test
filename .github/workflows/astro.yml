@@ -18,28 +18,75 @@ jobs:
       - name: Build AstroJS website
         run: yarn build
 
-      - name: Upload AstroJS files to Pinata Cloud
-        uses: pinata/pinata-actions@v1
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
         with:
-          pinata-token: ${{ secrets.PINATA_TOKEN }}
-          filenames: 'dist/*'
-          directory: dist
-          pinata-link-type: 'Ipfs'
+          name: astrojs-website
+          path: dist
 
-      - name: Set deploy status
-        uses: peter-evans/create-status@v2.3.1
+      - name: Enable workflow (manually)
+        if: github.event_name == 'push'
+        run: echo "Enabling workflow..."
+
+      - name: Deploy AstroJS website
+        uses: actions/github-script@v6
         with:
-          state: 'pending'
-          message: 'Deploying to Pinata Cloud...'
-          context: 'deployment'
+            script: |
+              // Get the PINATA_TOKEN secret from the environment
+              const PINATA_TOKEN = process.env.PINATA_TOKEN;
 
-      - name: Deploy AstroJS website to Pinata Cloud
-        run: |
-          curl -sS -H 'Authorization: Bearer ${{ secrets.PINATA_JWT_TOKEN }}' https://api.pinata.cloud/pinning/pin -X POST -F pinFile=@dist/index.html
+              // Get the artifact path
+              const artifactPath = `${GITHUB_WORKSPACE}/artifacts/astrojs-website`;
 
-      - name: Set deploy status
-        uses: peter-evans/create-status@v2.3.1
+              // Upload the artifact files to Pinata Cloud
+              const pinfile = fs.readFileSync(`${artifactPath}/index.html`);
+
+              const res = await fetch('https://api.pinata.cloud/pinning/pin', {
+                method: 'POST',
+                headers: {
+                  Authorization: `Bearer ${PINATA_TOKEN}`,
+                },
+                body: pinfile,
+              });
+
+              if (res.status === 200) {
+                const data = await res.json();
+                console.log('Successfully pinned files to Pinata Cloud:', data);
+              } else {
+                console.error('Failed to pin files to Pinata Cloud:', res);
+              }
+        secrets: ['PINATA_JWT_TOKEN']
+
+      - name: Deploy status
+        uses: actions/github-script@v6
         with:
-          state: 'success'
-          message: 'AstroJS website deployed successfully to Pinata Cloud.'
-          context: 'deployment'
+            script: |
+              // Update the deploy status to success
+              const url = `https://api.github.com/repos/${process.env.GITHUB_REPOSITORY}/statuses/${process.env.GITHUB_SHA}`;
+              const data = {
+                state: 'success',
+                message: 'AstroJS website deployed successfully to Pinata Cloud.',
+                context: 'deployment',
+              };
+
+              const options = {
+                method: 'PUT',
+                headers: {
+                  Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+                },
+                body: JSON.stringify(data),
+              };
+
+              const req = HttpClient().request(url, options);
+              req.on('error', (err) => {
+                console.error('Failed to update deploy status:', err);
+              });
+
+              req.on('response', (res) => {
+                if (res.status === 200) {
+                  console.log('Successfully updated deploy status.');
+                } else {
+                  console.error('Failed to update deploy status:', res);
+                }
+              });
+        secrets: ['GITHUB_TOKEN']
