@@ -86,9 +86,9 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v3
-      - name: Debug
+      - name: Debug Directory
         run: |
-          ls -al # Where the fuck are the build files
+          ls -R ${{ env.BUILD_PATH }}
       - name: Deploy to Pinata Cloud (IPFS)
         run: |
           cd ${{ env.BUILD_PATH }}/dist  # Change to the correct directory
