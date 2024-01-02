@@ -36,6 +36,9 @@ jobs:
         if: github.event_name == 'push'
         run: echo "Enabling workflow..."
 
+      - name: Debug
+        run: ls -al ./dist
+
       - name: Deploy AstroJS website
         uses: anantaramdas/ipfs-pinata-deploy-action@v1.6.4
         with:
