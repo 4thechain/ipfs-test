@@ -37,39 +37,14 @@ jobs:
         run: echo "Enabling workflow..."
 
       - name: Deploy AstroJS website
-        run: |
-          const fs = require('fs');
-          const fetch = require('node-fetch');
-          const PINATA_TOKEN = process.env.PINATA_TOKEN;
-          const artifactPath = 'dist';  # Update with the actual path
-
-          // Read the file asynchronously
-          fs.promises.readFile(`${artifactPath}/index.html`)
-            .then(pinfile => {
-              return fetch('https://api.pinata.cloud/pinning/pin', {
-                method: 'POST',
-                headers: {
-                  Authorization: `Bearer ${PINATA_TOKEN}`,
-                },
-                body: pinfile,
-              });
-            })
-            .then(res => {
-              if (res.ok) {
-                return res.json();
-              } else {
-                throw new Error(`Failed to pin files to Pinata Cloud: ${res.status}`);
-              }
-            })
-            .then(data => {
-              console.log('Successfully pinned files to Pinata Cloud:', data);
-            })
-            .catch(error => {
-              console.error(error);
-            });
-
-        env:
-          PINATA_TOKEN: ${{ secrets.PINATA_JWT_TOKEN }}
+        uses: anantaramdas/ipfs-pinata-deploy-action@v1.6.4
+        with:
+          pin-name: 'deploy-portfolio'
+          path: './dist'
+          pinata-api-key: 16e31d64b28de64fbcfb
+          pinata-secret-api-key: 8c1aa97b108ca5bf22bc30950478d5ea07df4c9f67fc73289a066fc2573ba1dd
+          verbose: true
+          remove-old: true
 
       - name: Deploy status
         run: |
