@@ -45,35 +45,3 @@ jobs:
           pinata-secret-api-key: 8c1aa97b108ca5bf22bc30950478d5ea07df4c9f67fc73289a066fc2573ba1dd
           verbose: true
           remove-old: true
-
-      - name: Deploy status
-        run: |
-          const { request } = require('@octokit/request');
-          const data = {
-            state: 'success',
-            description: 'AstroJS website deployed successfully to Pinata Cloud.',
-            context: 'deployment',
-          };
-
-          request('POST /repos/{owner}/{repo}/statuses/{sha}', {
-            owner: process.env.GITHUB_REPOSITORY.split('/')[0],
-            repo: process.env.GITHUB_REPOSITORY.split('/')[1],
-            sha: process.env.GITHUB_SHA,
-            ...data,
-            headers: {
-              authorization: `token ${process.env.GITHUB_TOKEN}`,
-            },
-          })
-            .then(res => {
-              if (res.status === 201) {
-                console.log('Successfully updated deploy status.');
-              } else {
-                throw new Error(`Failed to update deploy status: ${res.status}`);
-              }
-            })
-            .catch(error => {
-              console.error(error);
-            });
-
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
