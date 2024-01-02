@@ -37,7 +37,9 @@ jobs:
         run: echo "Enabling workflow..."
 
       - name: Debug
-        run: ls -al ./dist
+        run: ls -al dist
+      - name: More debugging
+        run: pwd 
 
       - name: Deploy AstroJS website
         uses: anantaramdas/ipfs-pinata-deploy-action@v1.6.4
