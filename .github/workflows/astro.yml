@@ -40,7 +40,7 @@ jobs:
         uses: anantaramdas/ipfs-pinata-deploy-action@v1.6.4
         with:
           pin-name: 'deploy-portfolio'
-          path: './dist'
+          path: 'dist'
           pinata-api-key: 16e31d64b28de64fbcfb
           pinata-secret-api-key: 8c1aa97b108ca5bf22bc30950478d5ea07df4c9f67fc73289a066fc2573ba1dd
           verbose: true
