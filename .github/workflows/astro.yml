@@ -12,40 +12,21 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '20'
-
-      - name: Install Yarn
-        run: npm install -g yarn
-
-      - name: Install AstroJS dependencies
-        run: yarn install
-
-      - name: Build AstroJS website
-        run: yarn build
-
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
-          name: astrojs-website
-          path: dist
+          name: cyborg-manifesto
+          path: ./Haraway_Donna_1985_A_Manifesto_for_Cyborgs_Science_Technology_and_Socialist_Feminism_in_the_1980s.pdf
 
       - name: Enable workflow (manually)
         if: github.event_name == 'push'
         run: echo "Enabling workflow..."
 
-      - name: Debug
-        run: ls -al dist
-      - name: More debugging
-        run: cd dist
-
       - name: Deploy AstroJS website
         uses: anantaramdas/ipfs-pinata-deploy-action@v1.6.4
         with:
-          pin-name: 'portfolio'
-          path: '.'
+          pin-name: 'cyborg-manifesto'
+          path: './Haraway_Donna_1985_A_Manifesto_for_Cyborgs_Science_Technology_and_Socialist_Feminism_in_the_1980s.pdf'
           pinata-api-key: 16e31d64b28de64fbcfb
           pinata-secret-api-key: 8c1aa97b108ca5bf22bc30950478d5ea07df4c9f67fc73289a066fc2573ba1dd
           verbose: true
