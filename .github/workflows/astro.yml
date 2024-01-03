@@ -26,7 +26,7 @@ jobs:
         uses: anantaramdas/ipfs-pinata-deploy-action@v1.6.4
         with:
           pin-name: 'cyborg-manifesto'
-          path: './Haraway_Donna_1985_A_Manifesto_for_Cyborgs_Science_Technology_and_Socialist_Feminism_in_the_1980s.pdf'
+          path: 'cyborg-manifesto'
           pinata-api-key: 16e31d64b28de64fbcfb
           pinata-secret-api-key: 8c1aa97b108ca5bf22bc30950478d5ea07df4c9f67fc73289a066fc2573ba1dd
           verbose: true
